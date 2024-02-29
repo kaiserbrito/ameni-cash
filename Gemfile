@@ -22,6 +22,7 @@ gem 'stimulus-rails'
 # gem "bcrypt", "~> 3.1.7"
 
 gem 'bootsnap', require: false
+gem 'money-rails'
 gem 'tzinfo-data', platforms: %i[windows jruby]
 
 group :development, :test do
