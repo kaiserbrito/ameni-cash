@@ -9,6 +9,8 @@
 # currency     :enum    not null, default("eur")
 #
 class Product < ApplicationRecord
+  has_many :promotions, dependent: :destroy
+
   validates :name, :code, :price_cents, presence: true
   validates :code, uniqueness: true
   validates :currency, inclusion: { in: %w[eur gbp usd] }
