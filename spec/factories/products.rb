@@ -2,9 +2,9 @@
 
 FactoryBot.define do
   factory :product do
-    name { 'Green Tea' }
-    code { 'GR1' }
-    price_cents { 311 }
+    name { Faker::Commerce.product_name }
+    code { Faker::Commerce.promotion_code }
+    price_cents { Faker::Number.number(digits: 4) }
     currency { 'eur' }
   end
 end
