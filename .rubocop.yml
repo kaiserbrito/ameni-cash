@@ -16,13 +16,13 @@ AllCops:
   SuggestExtensions: true
   NewCops: enable
   Exclude:
-    - "bin/{bundle,importmap,setup,rails,rake}"
-    - "**/config/**/*"
-    - "db/**/*"
-    - "log/**/*"
-    - "storage/**/*"
-    - "tmp/**/*"
-    - "vendor/**/*"
+    - 'bin/{bundle,importmap,setup,rails,rake}'
+    - '**/config/**/*'
+    - 'db/**/*'
+    - 'log/**/*'
+    - 'storage/**/*'
+    - 'tmp/**/*'
+    - 'vendor/**/*'
 
 Metrics/BlockLength:
   Enabled: false
@@ -75,7 +75,7 @@ Style/SpecialGlobalVars:
 
 Style/StringLiterals:
   Enabled: true
-  EnforcedStyle: double_quotes
+  EnforcedStyle: single_quotes
 
 Style/SymbolArray:
   EnforcedStyle: percent
