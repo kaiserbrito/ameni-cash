@@ -7,4 +7,8 @@
 # currency    :string   default("eur"), not null
 #
 class Cart < ApplicationRecord
+  validates :currency, :total_cents, presence: true
+
+  monetize :total_cents, as: :total_price, with_model_currency: :currency
+  validates :total_cents, numericality: { greater_than_or_equal_to: 0 }
 end
