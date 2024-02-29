@@ -10,4 +10,8 @@
 #
 class Promotion < ApplicationRecord
   belongs_to :product
+
+  validates :name, :discount, :quantity, presence: true
+  validates :discount, numericality: { greater_than: 0 }
+  validates :quantity, numericality: { greater_than: 1 }
 end
