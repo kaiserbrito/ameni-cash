@@ -1,11 +1,24 @@
-<div id="<%= dom_id product %>">
-  <div class="col-md-4">
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title"><%= product.name %></h5>
-        <p class="card-text">Code: <%= product.code %></p>
-        <p class="card-text">Price: <%= number_to_currency(product.price) %></p>
-        <p class="card-text">Promotions: <%= product.promotions.map(&:name).join(', ') %></p>
+<div class="group relative">
+  <div class="mt-4 flex justify-between">
+    <div id="<%= dom_id product %>">
+      <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="px-4 py-5 sm:px-6">
+          <h3 class="text-lg font-bold leading-6 text-gray-900"><%= product.name %></h3>
+          <p class="mt-1 max-w-2xl text-sm text-gray-500"><%= product.code %></p>
+          <p class="mt-1 max-w-2xl text-sm text-gray-500"><%= product.price.format %></p>
+        </div>
+        <div class="border-t border-gray-200">
+          <dl>
+            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-500">Promotions</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">
+                <% product.promotions.each do |promotion| %>
+                  <p class="mt-1 max-w-2xl text-sm text-gray-500"><%= promotion.name %></p>
+                <% end %>
+              </dd>
+            </div>
+          </dl>
+        </div>
       </div>
     </div>
   </div>
