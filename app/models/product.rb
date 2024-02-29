@@ -9,4 +9,9 @@
 # currency     :enum    not null, default("eur")
 #
 class Product < ApplicationRecord
+  validates :name, :code, :price_cents, :currency, presence: true
+  validates :code, uniqueness: true
+  validates :price_cents, numericality: { greater_than: 0 }
+
+  enum currency: { eur: "eur", gbp: "gbp", usd: "usd" }, _default: "eur"
 end
