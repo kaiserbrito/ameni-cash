@@ -2,9 +2,9 @@
 
 FactoryBot.define do
   factory :product do
-    name { "Green Tea" }
-    code { "GR1" }
+    name { 'Green Tea' }
+    code { 'GR1' }
     price_cents { 311 }
-    currency { "eur" }
+    currency { 'eur' }
   end
 end

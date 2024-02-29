@@ -13,5 +13,5 @@ class Product < ApplicationRecord
   validates :code, uniqueness: true
   validates :price_cents, numericality: { greater_than: 0 }
 
-  enum currency: { eur: "eur", gbp: "gbp", usd: "usd" }, _default: "eur"
+  enum currency: { eur: 'eur', gbp: 'gbp', usd: 'usd' }, _default: 'eur'
 end
