@@ -16,6 +16,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_01_121404) do
 
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
+  create_enum "discount_type", ["bogo", "fixed", "percentage"]
   create_enum "product_currency", ["eur", "usd", "gbp"]
 
   create_table "cart_products", force: :cascade do |t|
@@ -50,8 +51,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_01_121404) do
   create_table "promotions", force: :cascade do |t|
     t.bigint "product_id", null: false
     t.string "name", null: false
-    t.integer "discount", null: false
+    t.decimal "discount", null: false
     t.integer "quantity", null: false
+    t.enum "discount_type", default: "bogo", null: false, enum_type: "discount_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["product_id"], name: "index_promotions_on_product_id"

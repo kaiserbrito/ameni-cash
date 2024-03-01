@@ -17,4 +17,12 @@ RSpec.describe Promotion, type: :model do
       is_expected.to validate_numericality_of(:quantity).is_greater_than(1)
     end
   end
+
+  describe 'enums' do
+    it do
+      is_expected.to define_enum_for(:discount_type)
+        .with_values(bogo: 'bogo', fixed: 'fixed', percentage: 'percentage')
+        .backed_by_column_of_type(:enum)
+    end
+  end
 end
