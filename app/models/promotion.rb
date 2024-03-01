@@ -29,4 +29,35 @@ class Promotion < ApplicationRecord
   def applicable?(quantity)
     quantity >= self.quantity
   end
+
+  # Applies the promotion to the total price of products in the cart
+  #
+  # @param quantity [Integer] Quantity of products in the cart
+  # @param price_cents [Integer] Total price of products in cents
+  # @return [Integer] Total price after applying the promotion in cents, if applicable
+  def apply(quantity, price_cents)
+    return (price_cents * quantity) unless applicable?(quantity)
+
+    case discount_type
+    when 'bogo' then apply_bogo(quantity, price_cents)
+    when 'fixed' then apply_fixed(quantity, price_cents)
+    when 'percentage' then apply_percentage(quantity, price_cents)
+    else
+      price_cents
+    end
+  end
+
+  private
+
+  def apply_bogo(quantity, price_cents)
+    (quantity / 2.0).ceil * price_cents
+  end
+
+  def apply_fixed(quantity, price_cents)
+    (price_cents - discount).to_i * quantity
+  end
+
+  def apply_percentage(quantity, price_cents)
+    ((price_cents * discount / 100) * quantity).round
+  end
 end

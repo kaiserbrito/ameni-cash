@@ -41,4 +41,38 @@ RSpec.describe Promotion, type: :model do
       expect(promotion.applicable?(1)).to be_falsey
     end
   end
+
+  describe '#apply' do
+    context 'when promotion is applicable' do
+      context 'when promotion is Buy one get one free' do
+        let(:promotion) { create(:promotion, discount: 100, quantity: 2, discount_type: 'bogo') }
+
+        it 'returns the price with the discount applied', :aggregate_failures do
+          expect(promotion.apply(2, 311)).to eq(311)
+          expect(promotion.apply(3, 311)).to eq(622)
+          expect(promotion.apply(4, 311)).to eq(622)
+        end
+      end
+
+      context 'when promotion is fixed' do
+        let(:promotion) { create(:promotion, discount: 50, quantity: 3, discount_type: 'fixed') }
+
+        it 'returns the price with the discount applied', :aggregate_failures do
+          expect(promotion.apply(2, 500)).to eq(1000)
+          expect(promotion.apply(3, 500)).to eq(1350)
+          expect(promotion.apply(4, 500)).to eq(1800)
+        end
+      end
+
+      context 'when promotion is percentage' do
+        let(:promotion) { create(:promotion, discount: 66.666, quantity: 3, discount_type: 'percentage') }
+
+        it 'returns the price with the discount applied', :aggregate_failures do
+          expect(promotion.apply(2, 1123)).to eq(2246)
+          expect(promotion.apply(3, 1123)).to eq(2246)
+          expect(promotion.apply(4, 1123)).to eq(2995)
+        end
+      end
+    end
+  end
 end
