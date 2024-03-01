@@ -43,9 +43,10 @@ bundle exec rails db:create db:migrate db:seed
 ```
 
 ## Running the application
+It uses `foreman` to run the application.
 To run the application, you can use the following command:
 ```bash
-bundle exec rails s
+bin/dev
 ```
 
 ## Running the tests
