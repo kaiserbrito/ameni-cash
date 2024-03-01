@@ -25,4 +25,20 @@ RSpec.describe Promotion, type: :model do
         .backed_by_column_of_type(:enum)
     end
   end
+
+  describe '#applicable?' do
+    let(:promotion) { create(:promotion, discount: 100, quantity: 2) }
+
+    it 'returns true when quantity is greater than the promotion quantity' do
+      expect(promotion.applicable?(3)).to be_truthy
+    end
+
+    it 'returns true when quantity is equal to the promotion quantity' do
+      expect(promotion.applicable?(2)).to be_truthy
+    end
+
+    it 'returns false when quantity is less than the promotion quantity' do
+      expect(promotion.applicable?(1)).to be_falsey
+    end
+  end
 end

@@ -21,4 +21,12 @@ class Promotion < ApplicationRecord
     fixed: 'fixed',
     percentage: 'percentage'
   }, _default: 'bogo'
+
+  # Checks if the promotion is applicable based on the quantity of products in the cart
+  #
+  # @param quantity [Integer] Quantity of products in the cart
+  # @return [Boolean] True if the promotion is applicable, otherwise false
+  def applicable?(quantity)
+    quantity >= self.quantity
+  end
 end
