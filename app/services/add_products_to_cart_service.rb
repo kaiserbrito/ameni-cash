@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class AddProductsToCartService
+  ServiceResponse = Struct.new(:success, :message)
+
   def initialize(cart_id:, product_id:, quantity: 1)
     @cart_id = cart_id
     @product_id = product_id
@@ -11,9 +13,10 @@ class AddProductsToCartService
     ActiveRecord::Base.transaction do
       add_product_to_cart
     end
+
+    ServiceResponse.new(success: true, message: 'Product added to cart successfully.')
   rescue ActiveRecord::RecordNotFound => e
-    Rails.logger.error(e.message)
-    false
+    ServiceResponse.new(success: false, message: "Failed to add product to cart: #{e.message}")
   end
 
   private
