@@ -10,13 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_02_29_230051) do
+ActiveRecord::Schema[7.2].define(version: 2024_03_01_121404) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
   create_enum "product_currency", ["eur", "usd", "gbp"]
+
+  create_table "cart_products", force: :cascade do |t|
+    t.bigint "product_id", null: false
+    t.bigint "cart_id", null: false
+    t.integer "quantity", default: 0, null: false
+    t.integer "total_cents", default: 0, null: false
+    t.string "currency", default: "eur"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cart_id"], name: "index_cart_products_on_cart_id"
+    t.index ["product_id"], name: "index_cart_products_on_product_id"
+  end
 
   create_table "carts", force: :cascade do |t|
     t.integer "total_cents", default: 0, null: false
@@ -45,5 +57,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_02_29_230051) do
     t.index ["product_id"], name: "index_promotions_on_product_id"
   end
 
+  add_foreign_key "cart_products", "carts"
+  add_foreign_key "cart_products", "products"
   add_foreign_key "promotions", "products"
 end
