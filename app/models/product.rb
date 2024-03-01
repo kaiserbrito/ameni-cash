@@ -10,6 +10,7 @@
 #
 class Product < ApplicationRecord
   has_many :promotions, dependent: :destroy
+  has_one :cart_product, dependent: :destroy
 
   validates :name, :code, :price_cents, presence: true
   validates :code, uniqueness: true

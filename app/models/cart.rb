@@ -7,6 +7,8 @@
 # currency    :string   default("eur"), not null
 #
 class Cart < ApplicationRecord
+  has_many :cart_products, dependent: :destroy
+
   validates :currency, :total_cents, presence: true
 
   monetize :total_cents, as: :total_price, with_model_currency: :currency

@@ -3,6 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe Cart, type: :model do
+  describe 'associations' do
+    it { is_expected.to have_many(:cart_products).dependent(:destroy) }
+  end
+
   describe 'validations' do
     it 'checks for presence of total_cents and currency', :aggregate_failures do
       is_expected.to validate_presence_of(:total_cents)
