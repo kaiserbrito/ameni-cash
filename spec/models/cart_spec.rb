@@ -4,7 +4,10 @@ require 'rails_helper'
 
 RSpec.describe Cart, type: :model do
   describe 'associations' do
-    it { is_expected.to have_many(:cart_products).dependent(:destroy) }
+    it 'has many products_carts and products', :aggregate_failures do
+      is_expected.to have_many(:cart_products).dependent(:destroy)
+      is_expected.to have_many(:products).through(:cart_products)
+    end
   end
 
   describe 'validations' do
