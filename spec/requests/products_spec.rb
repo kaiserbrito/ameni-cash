@@ -15,4 +15,32 @@ RSpec.describe '/products', type: :request do
       expect(assigns(:products)).to match_array([green_tea, strawberries, coffee])
     end
   end
+
+  describe 'POST /add_to_cart' do
+    let(:add_to_cart) { post add_to_cart_product_url(green_tea) }
+
+    context 'with valid parameters' do
+      it 'adds the product to the cart', :aggregate_failures do
+        expect { add_to_cart }.to change(CartProduct, :count).by(1)
+
+        expect(flash[:notice]).to eq('Product added to cart successfully.')
+        expect(response).to redirect_to(products_url)
+      end
+    end
+
+    context 'with invalid parameters' do
+      before do
+        allow_any_instance_of(AddProductsToCartService).to receive(:call).and_return(
+          AddProductsToCartService::ServiceResponse.new(success: false, message: 'Failed to add product to cart')
+        )
+      end
+
+      it 'does not add the product to the cart', :aggregate_failures do
+        expect { add_to_cart }.not_to change(CartProduct, :count)
+
+        expect(flash[:alert]).to eq('Failed to add product to cart')
+        expect(response).to redirect_to(products_url)
+      end
+    end
+  end
 end
