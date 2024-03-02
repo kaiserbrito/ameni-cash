@@ -12,28 +12,50 @@ RSpec.describe AddProductsToCartService do
     let(:product_id) { product.id }
     let(:quantity) { 1 }
 
+    context 'when cart does not exist' do
+      let(:cart_id) { 0 }
+
+      it 'returns false', :aggregate_failures do
+        expect(add_products.success).to be_falsey
+        expect(add_products.message).to eq('Failed to add product to cart: Validation failed: Cart must exist')
+      end
+    end
+
     context 'when product does not exist' do
       let(:product_id) { 0 }
 
       it 'returns false', :aggregate_failures do
         expect(add_products.success).to be_falsey
-        expect(add_products.message).to eq('Failed to add product to cart: Couldn\'t find Product with \'id\'=0')
+        expect(add_products.message).to eq('Failed to add product to cart: Validation failed: Product must exist')
       end
     end
 
-    it 'adds products to the cart', :aggregate_failures do
+    context 'when fails to calculate total price' do
+      before do
+        allow_any_instance_of(CalculateTotalPriceService).to receive(:call).and_raise(CalculateTotalPriceService::Error)
+      end
+
+      it 'returns false', :aggregate_failures do
+        expect(add_products.success).to be_falsey
+        expect(add_products.message).to eq('Failed to update total price: CalculateTotalPriceService::Error')
+      end
+    end
+
+    it 'adds products to the cart and updates total_cents', :aggregate_failures do
       expect { add_products }.to change(cart.products, :count).by(1)
       expect(add_products.success).to be_truthy
       expect(add_products.message).to eq('Product added to cart successfully.')
+      expect(cart.reload.total_price.format).to eq('€1.00')
     end
 
     context 'when product is already in the cart' do
-      before { create(:products_cart, cart:, product:, quantity: 1) }
+      before { create(:cart_product, cart:, product:, quantity: 1) }
 
       it 'updates the quantity' do
-        expect { add_products }.to change { cart.products_carts.find_by(product:).quantity }.by(1)
+        expect { add_products }.to change { cart.cart_products.find_by(product:).quantity }.by(1)
         expect(add_products.success).to be_truthy
         expect(add_products.message).to eq('Product added to cart successfully.')
+        expect(cart.reload.total_price.format).to eq('€2.00')
       end
     end
   end
