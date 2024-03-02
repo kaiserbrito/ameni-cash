@@ -19,7 +19,8 @@ Promotion.find_or_create_by!(
   name: 'Buy 3 or more and get 10% off each strawberry',
   discount: 50,
   quantity: 3,
-  product: strawberries
+  product: strawberries,
+  discount_type: 'fixed'
 )
 puts "Promotion for '#{strawberries.name}' created"
 puts '===================='
@@ -28,10 +29,11 @@ coffee = Product.find_or_create_by!(name: 'Coffee', code: 'CF1', price_cents: 11
 puts "Product #{coffee.name} created"
 puts 'Creating promotion'
 Promotion.find_or_create_by!(
-  name: 'Coffee addiction',
-  discount: 33,
+  name: 'Buy 3 or more, the price drops to 2/3 of the original price',
+  discount: 66.666,
   quantity: 3,
-  product: coffee
+  product: coffee,
+  discount_type: 'percentage'
 )
 puts "Promotion for '#{coffee.name}' created"
 puts '===================='
