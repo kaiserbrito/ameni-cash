@@ -11,4 +11,8 @@ Rails.application.routes.draw do
     post :add_to_cart, on: :member, as: :add_to_cart
   end
   root to: "products#index"
+
+  resources :carts do
+    delete 'remove_product/:cart_product_id', to: 'carts#remove_product', as: 'remove_cart_product'
+  end
 end
