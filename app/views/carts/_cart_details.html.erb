@@ -1,0 +1,19 @@
+<% if @cart&.cart_products.present? %>
+  <div class="bg-gray-100 p-4 rounded-lg">
+    <h2 class="text-xl font-semibold mb-4">Cart</h2>
+    <% @cart.cart_products.each do |cart_product| %>
+      <div class="flex justify-between items-center mb-2">
+        <span><%= cart_product.product.name %></span>
+        <span><%= cart_product.quantity %></span>
+        <span><%= cart_product.total_price.format %></span>
+      </div>
+    <% end %>
+    <hr class="my-4">
+    <div class="flex justify-between items-center">
+      <span>Total:</span>
+      <span><%= @cart.total_price.format %></span>
+    </div>
+  </div>
+<% else %>
+  <p class="text-gray-500">Your cart is empty.</p>
+<% end %>

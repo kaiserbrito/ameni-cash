@@ -1,25 +1,10 @@
-<div class="group relative">
-  <div class="mt-4 flex justify-between">
-    <div id="<%= dom_id product %>">
-      <div class="bg-white overflow-hidden shadow rounded-lg">
-        <div class="px-4 py-5 sm:px-6">
-          <h3 class="text-lg font-bold leading-6 text-gray-900"><%= product.name %></h3>
-          <p class="mt-1 max-w-2xl text-sm text-gray-500"><%= product.code %></p>
-          <p class="mt-1 max-w-2xl text-sm text-gray-500"><%= product.price.format %></p>
-        </div>
-        <div class="border-t border-gray-200">
-          <dl>
-            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt class="text-sm font-medium text-gray-500">Promotions</dt>
-              <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">
-                <% product.promotions.each do |promotion| %>
-                  <p class="mt-1 max-w-2xl text-sm text-gray-500"><%= promotion.name %></p>
-                <% end %>
-              </dd>
-            </div>
-          </dl>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="bg-white rounded-lg shadow-md p-4">
+  <h2 class="text-xl font-semibold mb-2"><%= product.name %></h2>
+  <p class="text-gray-700 mb-2">Price: <%= product.price.format %></p>
+  <% if product.promotion %>
+    <p class="text-green-500 mb-2">Promotion: <%= product.promotion.name %></p>
+  <% else %>
+    <p class="text-gray-500 mb-2">No promotion available</p>
+  <% end %>
+  <%= button_to "Add to Cart", add_to_cart_product_path(product), method: :post, class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
 </div>
