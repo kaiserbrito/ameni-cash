@@ -29,6 +29,7 @@ Our check-out can scan items in any order, and because the CEO and COO change th
 ## Pre-requisites (running locally)
 - Ruby 3.3.0
 - Postgres > 9.0
+> If you prefer to use Docker, you can skip to the [Using Docker](#using-docker) section.
 
 ### Dependencies instalation
 It's a Rails application, so you need to install the dependencies using the following command:
@@ -54,3 +55,22 @@ To run the tests, you can use the following command:
 ```bash
 bundle exec rspec
 ```
+
+## Using Docker
+You can use Docker to run the application. Make sure you have Docker and Docker Compose installed and run the following command:
+```bash
+docker-compose up
+```
+
+Once the application is running, you can access it at `http://localhost:3000`
+
+## Data Model
+The application has the following data model:
+
+- **Product**: Represents a product available. Each product can have one associated promotion.
+
+- **Promotion**: Defines special offers or discounts applicable to certain products. Each product can have one associated promotion.
+
+- **Cart**: Represents a shopping cart that holds products for a user. Each cart can have multiple products added to it.
+
+- **CartProduct**: Join model representing the association between carts and products. Each cart product belongs to one cart and one product.
