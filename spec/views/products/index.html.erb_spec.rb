@@ -35,20 +35,17 @@ RSpec.describe 'products/index', type: :view do
     )
   end
 
-  before do
-    assign(:products, [green_tea, strawberries, coffee])
-    assign(:promotions, [green_tea.promotions, strawberries.promotions, coffee.promotions])
-  end
+  before { assign(:products, [green_tea, strawberries, coffee]) }
 
   it 'renders a list of products with their promotions', :aggregate_failures do
     render
 
     expect(rendered).to match(/Products/)
     expect(rendered).to match(/Green Tea/)
-    expect(rendered).to match(/Strawberries/)
-    expect(rendered).to match(/Coffee/)
     expect(rendered).to match(/Buy one get one free/)
+    expect(rendered).to match(/Strawberries/)
     expect(rendered).to match(/Buy 3 or more and get 10% off each strawberry/)
+    expect(rendered).to match(/Coffee/)
     expect(rendered).to match(/Coffee addiction/)
   end
 end

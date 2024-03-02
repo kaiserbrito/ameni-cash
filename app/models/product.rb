@@ -9,7 +9,7 @@
 # currency     :enum    not null, default("eur")
 #
 class Product < ApplicationRecord
-  has_many :promotions, dependent: :destroy
+  has_one :promotion, dependent: :destroy
   has_one :cart_product, dependent: :destroy
 
   validates :name, :code, :price_cents, presence: true

@@ -31,7 +31,7 @@ class CalculateTotalPriceService
   attr_reader :cart_product_id
 
   def update_total_price
-    total_price = if promotions.present?
+    total_price = if promotion.present?
                     calculate_price_with_promotion
                   else
                     cart_product.quantity * product.price_cents
@@ -41,9 +41,7 @@ class CalculateTotalPriceService
   end
 
   def calculate_price_with_promotion
-    promotions.map do |promotion|
-      promotion.apply(products_cart.quantity, product.price_cents)
-    end.sum
+    promotion.apply(cart_product.quantity, product.price_cents)
   end
 
   def cart_product
@@ -54,7 +52,7 @@ class CalculateTotalPriceService
     @product ||= cart_product.product
   end
 
-  def promotions
-    @promotions ||= product.promotions
+  def promotion
+    @promotion ||= product.promotion
   end
 end
