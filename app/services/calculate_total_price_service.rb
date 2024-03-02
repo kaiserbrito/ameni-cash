@@ -6,30 +6,38 @@
 # It uses the products cart's product and its quantities and the promotions to apply the discounts
 #
 class CalculateTotalPriceService
-  FailureResponse = Struct.new(:success, :message)
+  class Error < StandardError; end
 
-  def initialize(products_cart_id:)
-    @products_cart_id = products_cart_id
+  def initialize(cart_product_id:)
+    @cart_product_id = cart_product_id
   end
 
+  # Calculates the total price of the product cart, including any applicable promotions.
+  #
+  # @return [Integer] The total price in cents
+  # @raise [Error] If the calculation fails
   def call
-    calculate_total_price
+    ActiveRecord::Base.transaction do
+      update_total_price
+
+      cart_product.reload.total_cents
+    end
   rescue ActiveRecord::RecordNotFound => e
-    FailureResponse.new(success: false, message: "Failed to calculate total price: #{e.message}")
+    raise Error, "Failed to calculate total price: #{e.message}"
   end
 
   private
 
-  attr_reader :products_cart_id
+  attr_reader :cart_product_id
 
-  def calculate_total_price
+  def update_total_price
     total_price = if promotions.present?
                     calculate_price_with_promotion
                   else
-                    products_cart.quantity * product.price_cents
+                    cart_product.quantity * product.price_cents
                   end
 
-    products_cart.update!(total_cents: total_price)
+    cart_product.update!(total_cents: total_price)
   end
 
   def calculate_price_with_promotion
@@ -38,12 +46,12 @@ class CalculateTotalPriceService
     end.sum
   end
 
-  def products_cart
-    @products_cart ||= ProductsCart.find(products_cart_id)
+  def cart_product
+    @cart_product ||= CartProduct.find(cart_product_id)
   end
 
   def product
-    @product ||= products_cart.product
+    @product ||= cart_product.product
   end
 
   def promotions
